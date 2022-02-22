@@ -1,0 +1,109 @@
+category: Email Gateway
+commonfields:
+  id: PerceptionPoint v33
+  version: -1
+name: PerceptionPoint v33
+display: PerceptionPoint v3
+configuration:
+- defaultvalue: "https://api.perception-point.io/" # disable-secrets-detection
+  display: Your server URL
+  name: url
+  required: true
+  type: 0
+- display: Token to use Perception Point's API
+  additionalinfo: The API Key to use for connection
+  name: credentials
+  required: true
+  type: 4
+- display: Fetch incidents
+  name: isFetch
+  type: 8
+  required: false
+- display: Incidents Fetch Interval
+  name: incidentFetchInterval
+  defaultvalue: "1"
+  type: 19
+  required: false
+- display: Incident type
+  name: incidentType
+  type: 13
+  required: false
+- display: Trust any certificate (not secure)
+  name: insecure
+  required: false
+  type: 8
+- display: Use system proxy settings
+  name: proxy
+  required: false
+  type: 8
+description: '[Enter a comprehensive, yet concise, description of what the integration
+  does, what use cases it is designed for, etc.]'
+script:
+  commands:
+  - arguments:
+    - default: false
+      description: 'Enter the type of target(email,url,ip)'
+      isArray: false
+      name: target_type
+      required: true
+      secret: false
+    - default: false
+      description: 'Enter the blacklist object value (i.e 192.127.31.33)' # disable-secrets-detection
+      isArray: false
+      name: target_value
+      required: true
+      secret: false
+    - default: false
+      description: 'Enter your name'
+      isArray: false
+      name: created_by
+      required: true
+      secret: false
+    deprecated: false
+    description: 'This commands adds a record to the blacklist'
+    execution: false
+    name: pp-add-blacklist
+    outputs:
+    - contextPath: PP-Blacklist.Output
+      description: '[Enter a description of the data returned in this output.]'
+      type: String
+  - name: pp-release-email
+    description: 'This commands releases a mail that is in quarantine'
+    arguments:
+    - name: scan_id
+      description: 'Enter the scan id to release'
+      isArray: false
+      required: true
+    - name: should_mark_as_clean
+      description: 'Set to True if you want to release a mail without marking the
+        scan as clean'
+      required: false
+    outputs:
+    - contextPath: PP-ReleaseMail.Output
+      description: '[Enter a description of the data returned in this output.]'
+      type: String
+  - name: pp-add-whitelist
+    description: 'This commands adds a record to the whitelist'
+    arguments:
+    - name: target_type
+      description: 'Enter the type of target(email,url,ip)'
+      isArray: false
+      required: true
+    - name: target_value
+      description: 'Enter the whitelist object value (i.e 192.127.31.33)' # disable-secrets-detection
+      required: true
+    - name: created_by
+      description: 'Enter your name'
+      isArray: false
+      required: true
+    outputs:
+    - contextPath: PP-Whitelist.Output
+      description: '[Enter a description of the data returned in this output.]'
+      type: String
+  script: '-'
+  type: python
+  subtype: python3
+  dockerimage: demisto/python3:3.10.1.26972
+fromversion: 6.0.0
+tests:
+- No tests (auto formatted)
